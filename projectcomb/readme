@@ -1,0 +1,163 @@
+总概念
+
+//目的: 通过人名搜索所属流程。 1.部门包含，公司包含除外。2.主次负责人皆可
+// 流程组织结构：
+//大类->流程名->流程步骤->经办人->智能选人（主办人|经办人）。
+// 流程分类：  自增序号 分类id，分类名称,流程分类创建时间
+// 流程步骤： 自增序号, 流程id；流程名；流程大类；流程判断；流程分叉；流程合并；前一步（考虑到可能有两步或者三步，换成了var），后一步（考虑到可能有两步或者三步，换成了var），经办人；主办人；从办人,流程创建时间
+// 流程属性： 自增序号,流程id，经办人；主办人；从办人
+// 员工： 自增序号, 员工id，员工名称，性别，部门名称
+// 部门： 自增序号, 部门id，部门名称
+
+//流程分类 Classifi(nuid,cfid,cfname，cftime)
+//工作流 workflow （nuid,wfid,wfname,cfid,wftime）  xxxxx
+//流程步骤workstep （nuid,wsid,wsname,wfid,wsjudge,wsfork,wsmerge,wspreid,wsposid,wsauthorizer(授权人),wsoperator(经办人),wsorganiser(主办人)）
+//员工 Employee (nuid,emid,emname,emmale,depid)
+//部门 department（nuid,dpid,dpname）
+/*
+创建流程分类表
+CREATE TABLE `Classifi` (
+	`nuid` INT(11) NOT NULL AUTO_INCREMENT,
+	`cfid` INT(11) NOT NULL,
+	`cfname` VARCHAR(50) NULL DEFAULT '' COLLATE 'utf8mb4_general_ci',
+	`cftime` DATETIME NULL DEFAULT NULL,
+	PRIMARY KEY (`nuid`) USING BTREE,
+	UNIQUE INDEX `cfid` (`cfid`) USING BTREE
+)
+COMMENT='流程分类'
+COLLATE='utf8mb4_general_ci'
+ENGINE=InnoDB
+AUTO_INCREMENT=5
+;
+
+*/
+/*
+创建工作流
+CREATE TABLE `workflow` (
+	`nuid` INT(11) NOT NULL AUTO_INCREMENT,
+	`wfid` INT(11) NOT NULL,
+	`wfname` VARCHAR(50) NOT NULL DEFAULT '' COLLATE 'utf8mb4_general_ci',
+	`cfid` INT(11) NOT NULL DEFAULT '0',
+	`wftime` DATETIME NULL DEFAULT NULL,
+	PRIMARY KEY (`nuid`) USING BTREE,
+	UNIQUE INDEX `wfid` (`wfid`) USING BTREE,
+	INDEX `FK_workflow_Classifi` (`cfid`) USING BTREE,
+	CONSTRAINT `FK_workflow_Classifi` FOREIGN KEY (`cfid`) REFERENCES `workflows`.`Classifi` (`cfid`) ON UPDATE RESTRICT ON DELETE RESTRICT
+)
+COMMENT='工作流'
+COLLATE='utf8mb4_general_ci'
+ENGINE=InnoDB
+AUTO_INCREMENT=31
+;
+
+
+创建流程步骤表
+CREATE TABLE `workstep` (
+	`nuid` INT(11) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT,
+	`wsid` INT(11) NOT NULL,
+	`wsname` VARCHAR(50) NULL DEFAULT NULL COLLATE 'utf8mb4_general_ci',
+	`wfid` INT(11) NOT NULL,
+	`wsjudge` INT(11) NULL DEFAULT NULL,
+	`wsfork` INT(11) NULL DEFAULT NULL,
+	`wsmerge` INT(11) NULL DEFAULT NULL,
+	`wspreid` VARCHAR(50) NOT NULL DEFAULT '0' COLLATE 'utf8mb4_general_ci',
+	`wsposid` VARCHAR(50) NOT NULL DEFAULT '' COLLATE 'utf8mb4_general_ci',
+	`wsauthorizer` VARCHAR(50) NULL DEFAULT NULL COLLATE 'utf8mb4_general_ci',
+	`wsoperator` VARCHAR(50) NULL DEFAULT NULL COLLATE 'utf8mb4_general_ci',
+	`wsorganiser` VARCHAR(50) NULL DEFAULT NULL COLLATE 'utf8mb4_general_ci',
+	PRIMARY KEY (`nuid`) USING BTREE,
+	INDEX `FK__workflow` (`wfid`) USING BTREE,
+	CONSTRAINT `FK_workstep_workflow` FOREIGN KEY (`wfid`) REFERENCES `workflows`.`workflow` (`wfid`) ON UPDATE RESTRICT ON DELETE RESTRICT
+)
+COMMENT='流程步骤表'
+COLLATE='utf8mb4_general_ci'
+ENGINE=InnoDB
+AUTO_INCREMENT=218
+;
+
+
+
+*/
+/*
+bu
+这一步多余了创建工作流程属性表
+
+CREATE TABLE `wfproperities` (
+	`nuid` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`wpid` INT(11) NOT NULL,
+	`wfid` INT(11) NULL DEFAULT NULL,
+	`wsid` INT(11) NULL DEFAULT NULL,
+	`wpauthorizer` VARCHAR(50) NULL DEFAULT NULL COLLATE 'utf8mb4_general_ci',
+	`wpoperator` VARCHAR(50) NULL DEFAULT NULL COLLATE 'utf8mb4_general_ci',
+	`wporganiser` VARCHAR(50) NULL DEFAULT NULL COLLATE 'utf8mb4_general_ci',
+	PRIMARY KEY (`nuid`) USING BTREE,
+	INDEX `FK__workstep` (`wsid`) USING BTREE,
+	INDEX `FK_wfproperities_workflow` (`wfid`) USING BTREE,
+	CONSTRAINT `FK_wfproperities_workflow` FOREIGN KEY (`wfid`) REFERENCES `workflows`.`workflow` (`wfid`) ON UPDATE RESTRICT ON DELETE RESTRICT
+)
+COMMENT='工作流程属性'
+COLLATE='utf8mb4_general_ci'
+ENGINE=InnoDB
+;
+
+
+*/
+/*
+创建员工表
+CREATE TABLE `employee` (
+	`nuid` INT(11) NOT NULL AUTO_INCREMENT,
+	`emid` INT(11) NOT NULL,
+	`emname` VARCHAR(50) NULL DEFAULT NULL COLLATE 'utf8mb4_general_ci',
+	`emmale` INT(11) NULL DEFAULT NULL,
+	`dpid` INT(11) NULL DEFAULT NULL,
+	PRIMARY KEY (`nuid`) USING BTREE,
+	UNIQUE INDEX `emid` (`emid`) USING BTREE,
+	INDEX `FK__department` (`dpid`) USING BTREE,
+	CONSTRAINT `FK__department` FOREIGN KEY (`dpid`) REFERENCES `workflows`.`department` (`dpid`) ON UPDATE RESTRICT ON DELETE RESTRICT
+)
+COMMENT='员工'
+COLLATE='utf8mb4_general_ci'
+ENGINE=InnoDB
+AUTO_INCREMENT=80
+;
+
+
+*/
+
+/*
+创建部门表
+CREATE TABLE `department` (
+	`nuid` INT(11) NOT NULL AUTO_INCREMENT,
+	`dpid` INT(11) NOT NULL,
+	`dpname` VARCHAR(50) NULL DEFAULT '' COLLATE 'utf8mb4_general_ci',
+	PRIMARY KEY (`nuid`) USING BTREE,
+	UNIQUE INDEX `dpid` (`dpid`) USING BTREE
+)
+COMMENT='部门'
+COLLATE='utf8mb4_general_ci'
+ENGINE=InnoDB
+AUTO_INCREMENT=7
+;
+
+*/
+
+//业务模式
+//1.搜索数据
+// 搜索特定用户所属流程
+//2.更改数据1
+//更改特定用户所属流程数据
+//3.删除数据
+//删除特定用户流程数据
+
+
+程序设计
+VCLD模型： view: 前端视图 controller: 控制器，服务入口，路由处理 logic: 业务功能逻辑实现  dao： 数据存储等功能
+/route 路由
+/control 控制器
+/view 视图
+/logic 业务逻辑实现
+/common 公共组件
+/dao 数据存储等功能
+/route 路由
+/config 静态配置
+1.

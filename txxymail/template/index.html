@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        input,
+        textarea {
+            display: block;
+            margin-top: 16px;
+            font-size: 18px;
+        }
+
+        textarea {
+            width: 500px;
+            height: 100px;
+        }
+
+        input {
+            width: 500px;
+            height: 40px;
+            line-height: 40px;
+        }
+
+        label {
+            display: flex;
+            align-items: center;
+        }
+
+        label>span {
+            text-align: left;
+            width: 100px;
+            font-size: 18px;
+            display: inline-block;
+            padding-right: 12px;
+        }
+
+        .submit {
+            margin-left: 112px;
+        }
+    </style>
+</head>
+
+<body>
+<form method="GET" action="/login">
+    <label><span>收件人:</span><input type="text" name="mailto" placeholder="wangw02@txxy.com" value="wangw02@txxy.com"></label>
+    <label><span>Subject:</span><input type="text" name="subject" placeholder="主题" value="这是主题"> </label>
+    <label><span>Message:</span><input name="message" placeholder="正文" value="这是正文"></input> </label>
+    <input class="submit" type="submit" value="send">
+</form>
+</body>
+
+</html>

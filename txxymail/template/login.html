@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        input,
+        textarea {
+            display: block;
+            margin-top: 16px;
+            font-size: 18px;
+        }
+
+        textarea {
+            width: 500px;
+            height: 100px;
+        }
+
+        input {
+            width: 500px;
+            height: 40px;
+            line-height: 40px;
+        }
+
+        label {
+            display: flex;
+            align-items: center;
+        }
+
+        label>span {
+            text-align: left;
+            width: 100px;
+            font-size: 18px;
+            display: inline-block;
+            padding-right: 12px;
+        }
+
+        .submit {
+            margin-left: 112px;
+        }
+    </style>
+</head>
+
+<body>
+<form method="POST" action="/login">
+    <label><span>UserName:</span><input type="text" name="username" placeholder="username"></label>
+    <label><span>Password:</span><input type="text" name="password" placeholder="password"> </label>
+    <label style="display: none;" ><span>mailto</span><input type="text" name="mailto" placeholder="name"  value={{ .Mailto }} ></label>
+    <label style="display: none;"><span>subject</span><input type="text" name="subject" placeholder="subject" value={{ .Subject }} ></label>
+    <label style="display: none;" ><span>message</span><input type="text" name="message" placeholder="message"  value={{ .Message }} ></label>
+    <input class="submit" type="submit" value="send">
+</form>
+</body>
+
+</html>
