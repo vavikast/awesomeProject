@@ -70,7 +70,7 @@ func GetNetworkList() map[string]string {
 	ethaddr := make(map[string]string)
 	//添加两个固定IP地址
 	ethaddr["移动专线-ethernet0/4"] = "183.xx.158.xxx"
-	ethaddr["电信ICP-ethernet0/7"] = "183.xx.131.xxx"
+	ethaddr["电信ICP-ethernet0/7"] = "183.xx	.131.xxx"
 	for _, onenetworkaddr := range networkipaddr {
 		// 对每一行生成一个map
 		ethaddr["电信ADSL"+"-"+onenetworkaddr[1]] = onenetworkaddr[2]
