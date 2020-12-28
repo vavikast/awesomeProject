@@ -1,0 +1,13 @@
+{
+       "logtime" => "Dec 28 10:40:01",
+      "@version" => "1",
+          "type" => "hillstone",
+          "host" => "192.168.101.1",
+          "Sort" => "Event",
+         "Class" => "NET",
+        "reason" => "ARP条目已创建，183.62.131.137，0025.4500.8b80，trust-vr\n\u0000",
+          "Sort" => "Network",
+         "Class" => "NET",
+        "reason" => "PPPoE ethernet0/5_pppoe从服务器获得IP地址113.118.72.224\n\u0000",
+    "@timestamp" => 2020-12-28T01:46:18.691Z
+}

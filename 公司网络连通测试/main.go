@@ -1,14 +1,40 @@
 package main
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
 	"github.com/go-gomail/gomail"
 	"io/ioutil"
+	"net/http"
 	"os/exec"
 	"regexp"
 	"strings"
 	"time"
 )
+
+//钉钉自定义机器人： https://ding-doc.dingtalk.com/document#/org-dev-guide/custom-robot/title-72m-8ag-pqw
+//{
+//	"msgtype": "text",
+//	"text": {
+//		"content": "我就是我, @150XXXXXXXX 是不一样的烟火"
+//},
+//	"at": {
+//		"atMobiles": [
+//		"150XXXXXXXX"
+//],
+//	"isAtAll": false
+//}
+//}
+//定义匹配json结构体格式
+type Text struct {
+	Content string `json:"content"`
+}
+
+type Webhookjson struct {
+	Msgtype string `json:"msgtype"`
+	Text    `json:"text"`
+}
 
 func main() {
 	//获取主机列表
@@ -25,10 +51,10 @@ func NetWorkStatus(networklist map[string]string) {
 	for networkname, ipaddr := range networklist {
 		fmt.Println(networkname, ipaddr)
 		out, _ := exec.Command("ping", ipaddr, "-c", "5", "-i", "0", "-W", "1").Output()
-		fmt.Println(string(out))
 		if strings.Contains(string(out), "100% packet loss") {
 			fmt.Println("network down")
 			Sendmail(networkname, ipaddr)
+			SendWebhook(networkname, ipaddr)
 		} else {
 			fmt.Println("IT'S ALIVEEE")
 		}
@@ -57,7 +83,7 @@ func Sendmail(networkname, ipaddr string) {
 
 //获取发送邮件发送列表
 func GetNetworkList() map[string]string {
-	data, err := ioutil.ReadFile(`F:\goproject\src\awesomeProject\公司网络连接测试\pattern\network.txt`)
+	data, err := ioutil.ReadFile(`F:\goproject\src\awesomeProject\公司网络连通测试\pattern\network.txt`)
 	if err != nil {
 		fmt.Println("File reading error", err)
 		return nil
@@ -76,4 +102,48 @@ func GetNetworkList() map[string]string {
 		ethaddr["电信ADSL"+"-"+onenetworkaddr[1]] = onenetworkaddr[2]
 	}
 	return ethaddr
+}
+
+//转换为json格式。
+func ToJson(text string) (marshal []byte, err error) {
+	newjson := Webhookjson{
+		Msgtype: "text",
+	}
+	newjson.Content = text
+	marshal, err = json.Marshal(newjson)
+	if err != nil {
+		fmt.Println(err)
+		return nil, nil
+	}
+	return marshal, nil
+}
+
+//发送webhook信息
+func SendWebhook(networkname, ipaddr string) error {
+	now := time.Now()
+	nowtime := now.Format("2006-01-02 15-04-05")
+	contentbody := nowtime + "  公司网络连接故障 " + networkname + ipaddr
+
+	marshaljson, err := ToJson(contentbody)
+	if err != nil {
+		fmt.Println(err)
+		return nil
+	}
+	//钉钉webhook
+	url := "https://oapi.dingtalk.com/robot/send?access_token=51345145d106753486bd71614bf881283f91e2124535276b257f99327e41dc87"
+	//钉钉格式
+	contentType := "application/json"
+	resp, err := http.Post(url, contentType, bytes.NewBuffer(marshaljson))
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+	fmt.Println(string(body))
+	return nil
 }
