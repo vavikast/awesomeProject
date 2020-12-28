@@ -36,6 +36,7 @@ type Webhookjson struct {
 	Text    `json:"text"`
 }
 
+//五分钟扫描一次
 func main() {
 	//获取主机列表
 	list := GetNetworkList()
@@ -53,7 +54,9 @@ func NetWorkStatus(networklist map[string]string) {
 		out, _ := exec.Command("ping", ipaddr, "-c", "5", "-i", "0", "-W", "1").Output()
 		if strings.Contains(string(out), "100% packet loss") {
 			fmt.Println("network down")
+			//发送到邮箱
 			Sendmail(networkname, ipaddr)
+			//发送到钉钉webhook
 			SendWebhook(networkname, ipaddr)
 		} else {
 			fmt.Println("IT'S ALIVEEE")
@@ -130,7 +133,7 @@ func SendWebhook(networkname, ipaddr string) error {
 		return nil
 	}
 	//钉钉webhook
-	url := "https://oapi.dingtalk.com/robot/send?access_token=51345145d106753486bd71614bf881283f91e2124535276b257f99327e41dc87"
+	url := "https://oapi.dingtalk.com/robot/send?access_token=xx"
 	//钉钉格式
 	contentType := "application/json"
 	resp, err := http.Post(url, contentType, bytes.NewBuffer(marshaljson))
