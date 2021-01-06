@@ -38,7 +38,7 @@ func (c *Config) initConfig() error {
 	if c.Name != "" {
 		viper.SetConfigFile(c.Name) //如果制定了配置文件，则解析指定的配置文件
 	} else {
-		viper.AddConfigPath("apiserver/demo2/config") //如果没有指定配置文件，则解析默认的配置文件
+		viper.AddConfigPath("apiserver/demo4/config") //如果没有指定配置文件，则解析默认的配置文件
 		viper.SetConfigName("config")
 	}
 	viper.SetConfigType("yaml")

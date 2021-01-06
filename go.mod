@@ -22,6 +22,7 @@ require (
 	github.com/golang/protobuf v1.4.2
 	github.com/google/go-cmp v0.5.2 // indirect
 	github.com/jinzhu/gorm v1.9.15
+	github.com/jinzhu/now v1.1.1 // indirect
 	github.com/jmoiron/sqlx v1.2.0
 	github.com/juju/ratelimit v1.0.1
 	github.com/labstack/gommon v0.3.0
@@ -44,6 +45,8 @@ require (
 	github.com/swaggo/files v0.0.0-20190704085106-630677cd5c14
 	github.com/swaggo/gin-swagger v1.2.0
 	github.com/swaggo/swag v1.6.7
+	github.com/teris-io/shortid v0.0.0-20201117134242-e59966efd125
+	github.com/willf/pad v0.0.0-20200313202418-172aa767f2a4
 	github.com/zxmrlc/log v0.0.0-20200612082315-9e0c7ff11ddb
 	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9
 	golang.org/x/tools v0.0.0-20200426102838-f3a5411a4c3b // indirect

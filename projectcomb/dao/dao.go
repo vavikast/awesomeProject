@@ -10,7 +10,7 @@ var db *sqlx.DB
 
 // Init 初始化MySQL连接
 func Init() (err error) {
-	dsn := "wl:acfi1e@ije#201tcp(192.168.20.201:3306)/workflows?charset=utf8mb4&parseTime=True"
+	dsn := "wl:acfi1e@ije#201@tcp(192.168.20.201:3306)/workflows?charset=utf8mb4&parseTime=True"
 	// 也可以使用MustConnect连接不成功就panic
 	db, err = sqlx.Connect("mysql", dsn)
 	if err != nil {

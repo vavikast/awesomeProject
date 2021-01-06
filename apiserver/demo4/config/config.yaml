@@ -1,8 +1,9 @@
 runmode: debug               # 开发模式, debug, release, test
-addr: :6663                  # HTTP绑定端口
+addr: :8080                 # HTTP绑定端口
 name: apiserver              # API Server的名字
-url: http://127.0.0.1:6663   # pingServer函数请求的API服务器的ip:port
+url: http://127.0.0.1:8080   # pingServer函数请求的API服务器的ip:port
 max_ping_count: 10
+jwt_secret: Rtg8BPKNEf2mB4mgvKONGPZZQSaJWNLijxR42qRgqRiBb5
 gromlog: true
 log:
   writers: file,stoud
@@ -15,7 +16,7 @@ log:
   log_backup_count: 7
 db:
   name: db_apiserver
-  addr:  192.168.14.137:3306
+  addr:  192.168.14.171:3306
   username: root
   password: gGSWJP0oK4Q6XPwl@
 dockder_db:
@@ -23,3 +24,8 @@ dockder_db:
   addr:  127.0.0.1:3306
   username: root
   password: root
+tls:
+  addr: :8081
+  cert: F:\goproject\src\awesomeProject\apiserver\demo4\conf\server.crt
+  key:  F:\goproject\src\awesomeProject\apiserver\demo4\conf\server.key
+
